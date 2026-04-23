@@ -3,6 +3,7 @@ package config
 import (
 	"os"
 	"strconv"
+	"strings"
 )
 
 type Config struct {
@@ -19,7 +20,7 @@ type Config struct {
 
 func Load() Config {
 	return Config{
-		HTTPAddr:           getEnv("HTTP_ADDR", ":8080"),
+		HTTPAddr:           httpListenAddr(),
 		DatabaseURL:        getEnv("DATABASE_URL", "postgres://postgres:postgres@localhost:5432/lms?sslmode=disable"),
 		JWTSecret:          getEnv("JWT_SECRET", "dev-secret-change-me"),
 		JWTIssuer:          getEnv("JWT_ISSUER", "lms-api"),
@@ -31,6 +32,20 @@ func Load() Config {
 	}
 }
 
+// httpListenAddr: локально — :8080 или HTTP_ADDR из .env; в Railway/Fly и т.п. — PORT (без shell-подстановки ${PORT} в env).
+func httpListenAddr() string {
+	raw := os.Getenv("HTTP_ADDR")
+	if raw != "" && !strings.Contains(raw, "${") {
+		return raw
+	}
+	if p := os.Getenv("PORT"); p != "" {
+		return "0.0.0.0:" + p
+	}
+	if raw != "" {
+		return raw
+	}
+	return ":8080"
+}
 func getEnv(key, fallback string) string {
 	if value := os.Getenv(key); value != "" {
 		return value

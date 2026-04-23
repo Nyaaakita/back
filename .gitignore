@@ -1,0 +1,50 @@
+# Сборка и артефакты
+/bin/
+/dist/
+/out/
+/tmp/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# Go
+vendor/
+go.work
+go.work.sum
+
+# Покрытие и бенчмарки
+*.cover
+*.coverprofile
+coverage.out
+coverage.html
+profile.cov
+cpu.prof
+mem.prof
+
+# Окружение и секреты
+.env
+.env.*
+!.env.example
+
+# IDE
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/launch.json
+*.iml
+*.swp
+*.swo
+*~
+
+# ОС
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Логи
+*.log
